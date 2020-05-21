@@ -1,5 +1,7 @@
 require "option_parser"
 
+open_link = false
+open_immediate = false
 meeting_name = ["meeting"]
 enum TitleStyle
   SnakeCase
@@ -49,8 +51,16 @@ OptionParser.parse do |parser|
     name_style = TitleStyle::Heart
   }
   parser.on("-j TEXT", "--emoji=TEXT", "put TEXT between words of meeting title") do |text|
-      name_style = TitleStyle::Custom
-      custom_text = text
+    name_style = TitleStyle::Custom
+    custom_text = text
+  end
+  parser.on("-o", "--open", "open URL in your browser after a short pause") {
+    open_link = true
+  }
+  parser.on("-O", "--open-immediate", "open URL in your browser immediately") {
+    open_link = true
+    open_immediate = true
+  }
   end
 
   parser.unknown_args do |args|
@@ -65,3 +75,8 @@ end
 title_text = title(name_style, meeting_name, custom_text)
 link = "https://meet.jit.si/#{super_secure_string}/#{title_text}"
 puts link
+if open_link
+  puts "🌍️ opening in your browser…"
+  sleep(0.5.seconds) unless open_immediate
+  `xdg-open #{link}`
+end
