@@ -4,6 +4,7 @@ open_link = false
 open_immediate = false
 send_to_keybase = false
 keybase_recipient = ""
+xclip = false
 meeting_name = ["meeting"]
 enum TitleStyle
   SnakeCase
@@ -63,10 +64,14 @@ OptionParser.parse do |parser|
     open_link = true
     open_immediate = true
   }
+  parser.on("-c", "--copy", "copy URL to clipboard using xsel") {
+    xclip = true
+  }
   parser.on("-k USER", "--send-kb=USER", "send URL to USER on Keybase") do |user|
     send_to_keybase = true
     keybase_recipient = user
   end
+
 
   parser.unknown_args do |args|
     meeting_name = args unless args.empty?
@@ -80,6 +85,10 @@ end
 title_text = title(name_style, meeting_name, custom_text)
 link = "https://meet.jit.si/#{super_secure_string}/#{title_text}"
 puts link
+if xclip
+  puts "🚀️ copied to clipboard!"
+  `echo -n "#{link}" | xsel -bi`
+end
 if send_to_keybase
   puts "📨️ sent link to #{keybase_recipient} on Keybase!"
   `keybase chat send --private #{keybase_recipient} "#{link}"`
