@@ -57,13 +57,18 @@ $ sudo install meet /usr/local/bin/meet
 
 To install `meet` from source, you will need these dependencies:
 - git
-- crystal
 - make
-- install
+- [crystal](https://crystal-lang.org/)
+- coreutils
 
-Follow these steps:
+Crystal has these transitive dependencies: `gcc`, `pkg-config`, `libpcre3-dev`,
+`libevent-dev`.
+
+
+Follow these steps to install:
 ```sh-session
 $ git clone https://github.com/ryanprior/meet.git
+$ cd meet
 $ make
 $ sudo make install
 ```
