@@ -87,6 +87,16 @@ OptionParser.parse do |parser|
     send_to_keybase = true
     keybase_recipient = user
   end
+  parser.on("-v", "--version", "show version information") do
+    version = {{read_file("./shard.yml")
+                 .lines
+                 .select(&.starts_with? "version")
+                 .first
+               }}.split(/: */).last
+    git = {{"#{`git rev-parse HEAD`}".strip}}
+    puts "meet version #{version} (#{git})"
+    exit
+  end
   parser.on("-h", "--help", "show this help") do
     puts parser
     exit
