@@ -41,3 +41,29 @@ https://meet.jit.si/iN9SYLvP/HackOnMeet
 | .       | -O      | --open-immediate | open URL in your browser immediately         |
 | copy    | -c      | --copy           | copy URL to clipboard using xsel             |
 | send    | -k USER | --send-kb=USER   | send URL to USER on Keybase                  |
+
+## Installation
+
+Go to [releases](https://github.com/ryanprior/meet/releases) and download the
+latest archive. Then unpack it somewhere on your PATH, such as:
+
+```sh-session
+$ cd ~/Downloads
+$ tar xzf meet-1.0.tgz
+$ sudo install meet /usr/local/bin/meet
+```
+
+### Installation from source
+
+To install `meet` from source, you will need these dependencies:
+- git
+- crystal
+- make
+- install
+
+Follow these steps:
+```sh-session
+$ git clone https://github.com/ryanprior/meet.git
+$ make
+$ sudo make install
+```
