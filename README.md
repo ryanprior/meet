@@ -35,7 +35,7 @@ https://meet.jit.si/iN9SYLvP/HackOnMeet
 | .       | -d      | --dash           | use dashes for meeting title                 |
 | .       | -t      | --title          | use TitleCase for meeting title (default)    |
 | .       | -S      | --shout          | use SHOUT👏️CASE🗯️ for meeting title           |
-| .       | -h      | --heart          | use ❣️heart❤️style❣️ for meeting title          |
+| .       | -3      | --heart          | use ❣️heart❤️style❣️ for meeting title          |
 | .       | -j TEXT | --emoji=TEXT     | put TEXT between words of meeting title      |
 | open    | -o      | --open           | open URL in your browser after a short pause |
 | .       | -O      | --open-immediate | open URL in your browser immediately         |
