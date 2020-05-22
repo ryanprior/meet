@@ -66,7 +66,7 @@ OptionParser.parse do |parser|
   parser.on("-S", "--shout", "use SHOUT👏️CASE🗯️ for meeting title") {
     name_style = TitleStyle::ScreamCase
   }
-  parser.on("-h", "--heart", "use ❣️heart❤️style❣️ for meeting title") {
+  parser.on("-3", "--heart", "use ❣️heart❤️style❣️ for meeting title") {
     name_style = TitleStyle::Heart
   }
   parser.on("-j TEXT", "--emoji=TEXT", "put TEXT between words of meeting title") do |text|
@@ -86,6 +86,10 @@ OptionParser.parse do |parser|
   parser.on("-k USER", "--send-kb=USER", "send URL to USER on Keybase") do |user|
     send_to_keybase = true
     keybase_recipient = user
+  end
+  parser.on("-h", "--help", "show this help") do
+    puts parser
+    exit
   end
 
 
