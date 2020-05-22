@@ -15,6 +15,7 @@
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
 require "option_parser"
+require "colorize"
 
 open_link = false
 open_immediate = false
@@ -114,17 +115,21 @@ end
 
 title_text = title(name_style, meeting_name, custom_text)
 link = "https://meet.jit.si/#{super_secure_string}/#{title_text}"
-puts link
+puts link.colorize :blue
 if xclip
-  puts "🚀️ copied to clipboard!"
   `echo -n "#{link}" | xsel -bi`
+  c = "c".colorize.mode :underline
+  puts "🚀️ #{c}opied to clipboard!"
 end
 if send_to_keybase
-  puts "📨️ sent link to #{keybase_recipient} on Keybase!"
-  `keybase chat send --private #{keybase_recipient} "#{link}"`
+  `keybase chat send --private "#{keybase_recipient}" "#{link}"`
+  k = "k".colorize.mode :underline
+  whom = keybase_recipient.colorize :light_yellow
+  puts "📨️ sent lin#{k} to #{whom} on Keybase!"
 end
 if open_link
-  puts "🌍️ opening in your browser…"
+  o = "o".colorize.mode :underline
+  puts "🌍️ #{o}pening in your browser…"
   sleep(0.5.seconds) unless open_immediate
   `xdg-open #{link}`
 end
