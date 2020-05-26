@@ -16,6 +16,12 @@
 
 require "option_parser"
 require "colorize"
+require "yaml"
+
+meet_dir = %Q[#{ENV["HOME"]}/.config/meet]
+settings_file = "#{meet_dir}/meet.yml"
+settings = Hash(Symbol, String)
+settings = YAML.parse(File.read(settings_file)) if File.exists?(settings_file)
 
 open_link = false
 open_immediate = false
@@ -98,6 +104,15 @@ OptionParser.parse do |parser|
     puts "meet version #{version} (#{git})"
     exit
   end
+  parser.on("", "--init", "initialize meet with a config file") do
+    Dir.mkdir_p(meet_dir)
+    File.open("#{meet_dir}/meet.yml", "w") do |f|
+      settings = {base_url: "meet.jit.si"}
+      f.puts(settings.to_yaml)
+    end
+    puts "📝 wrote config to #{meet_dir}/meet.yml"
+    exit
+  end
   parser.on("-h", "--help", "show this help") do
     puts parser
     exit
@@ -114,7 +129,8 @@ def super_secure_string
 end
 
 title_text = title(name_style, meeting_name, custom_text)
-link = "https://meet.jit.si/#{super_secure_string}/#{title_text}"
+base_url = settings.get(:base_url, "meet.jit.si")
+link = "https://#{base_url}/#{super_secure_string}/#{title_text}"
 puts link.colorize :blue
 if xclip
   `echo -n "#{link}" | xsel -bi`
