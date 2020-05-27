@@ -1,5 +1,5 @@
 name: meet
 version: 1.0.0
-dependencies: {}
-  # readline:
-  #   github: crystal-lang/crystal-readline
+dependencies:
+  readline:
+    github: crystal-lang/crystal-readline

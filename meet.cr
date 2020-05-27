@@ -17,7 +17,7 @@
 require "option_parser"
 require "colorize"
 require "yaml"
-# require "readline"
+require "readline"
 
 meet_dir = %Q[#{ENV["HOME"]}/.config/meet]
 settings_file = "#{meet_dir}/meet.yml"
@@ -111,10 +111,14 @@ OptionParser.parse do |parser|
   parser.on("", "--init", "initialize meet with a config file") do
     Dir.mkdir_p(meet_dir)
     new_settings = Hash(String, String).new
-    # input = Readline.readline("baseurl(#{base_url}): ").not_nil!.strip
-    printf "baseurl(#{base_url}): "
-    input = gets.not_nil!.strip
-    new_settings["base_url"] = input.empty? ? base_url : input
+    input = Readline.readline("Base url (#{base_url}): ")
+    new_settings["base_url"] = case input
+                               when Nil
+                                 base_url
+                               when String
+                                 input.empty? ? base_url : input.strip
+                               else raise "unexpected input"
+                               end
     File.open("#{meet_dir}/meet.yml", "w") do |f|
       f.puts(new_settings.to_yaml)
     end
