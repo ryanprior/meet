@@ -17,11 +17,13 @@
 require "option_parser"
 require "colorize"
 require "yaml"
+require "readline"
 
 meet_dir = %Q[#{ENV["HOME"]}/.config/meet]
 settings_file = "#{meet_dir}/meet.yml"
-settings = Hash(Symbol, String)
-settings = YAML.parse(File.read(settings_file)) if File.exists?(settings_file)
+settings = Hash(String, String).new
+settings = YAML.parse(File.read(settings_file)).as_h if File.exists?(settings_file)
+base_url = settings.fetch("base_url", "meet.jit.si").to_s
 
 open_link = false
 open_immediate = false
@@ -39,6 +41,8 @@ enum TitleStyle
 end
 name_style = TitleStyle::TitleCase
 custom_text = ""
+
+
 
 def title(style, words, custom_text="")
   case style
@@ -106,9 +110,11 @@ OptionParser.parse do |parser|
   end
   parser.on("", "--init", "initialize meet with a config file") do
     Dir.mkdir_p(meet_dir)
+    new_settings = Hash(String, String).new
+    input = Readline.readline("baseurl(#{base_url}): ").not_nil!.strip
+    new_settings["base_url"] = input.empty? ? base_url : input
     File.open("#{meet_dir}/meet.yml", "w") do |f|
-      settings = {base_url: "meet.jit.si"}
-      f.puts(settings.to_yaml)
+      f.puts(new_settings.to_yaml)
     end
     puts "📝 wrote config to #{meet_dir}/meet.yml"
     exit
@@ -129,7 +135,6 @@ def super_secure_string
 end
 
 title_text = title(name_style, meeting_name, custom_text)
-base_url = settings.get(:base_url, "meet.jit.si")
 link = "https://#{base_url}/#{super_secure_string}/#{title_text}"
 puts link.colorize :blue
 if xclip
