@@ -19,10 +19,12 @@ require "colorize"
 require "yaml"
 require "readline"
 
-meet_dir = %Q[#{ENV["HOME"]}/.config/meet]
+config_home = ENV.fetch("XDG_CONFIG_HOME", %Q[#{ENV["HOME"]}/.config])
+meet_dir = "#{config_home}/meet/"
 settings_file = "#{meet_dir}/meet.yml"
-settings = Hash(String, String).new
-settings = YAML.parse(File.read(settings_file)).as_h if File.exists?(settings_file)
+settings = if File.exists?(settings_file)
+             YAML.parse(File.read(settings_file)).as_h
+           else Hash(String, String).new end
 base_url = settings.fetch("base_url", "meet.jit.si").to_s
 
 open_link = false
@@ -119,10 +121,10 @@ OptionParser.parse do |parser|
                                  input.empty? ? base_url : input.strip
                                else raise "unexpected input"
                                end
-    File.open("#{meet_dir}/meet.yml", "w") do |f|
+    File.open("#{settings_file}", "w") do |f|
       f.puts(new_settings.to_yaml)
     end
-    puts "📝 wrote config to #{meet_dir}/meet.yml"
+    puts "📝 wrote config to #{settings_file}"
     exit
   end
   parser.on("-h", "--help", "show this help") do
