@@ -21,7 +21,7 @@ require "readline"
 
 config_home = ENV.fetch("XDG_CONFIG_HOME", %Q[#{ENV["HOME"]}/.config])
 meet_dir = "#{config_home}/meet/"
-settings_file = "#{meet_dir}/meet.yml"
+settings_file = "#{meet_dir}/settings.yml"
 settings = if File.exists?(settings_file)
              YAML.parse(File.read(settings_file)).as_h
            else Hash(String, String).new end
