@@ -29,18 +29,20 @@ https://meet.jit.si/iN9SYLvP/HackOnMeet
 
 ### Options
 
-| feature | short     | long               | description                                  |
-|---------|-----------|--------------------|----------------------------------------------|
-| style   | `-s`      | `--snake`          | use snake_case for meeting title             |
-|         | `-d`      | `--dash`           | use dashes for meeting title                 |
-|         | `-t`      | `--title`          | use TitleCase for meeting title (default)    |
-|         | `-S`      | `--shout`          | use SHOUT👏️CASE🗯️ for meeting title           |
-|         | `-3`      | `--heart`          | use ❣️heart❤️style❣️ for meeting title          |
-|         | `-j TEXT` | `--emoji=TEXT`     | put `TEXT` between words of meeting title    |
-| open    | `-o`      | `--open`           | open url in your browser after a short pause |
-|         | `-O`      | `--open-immediate` | open url in your browser immediately         |
-| copy    | `-c`      | `--copy`           | copy url to clipboard using `xsel`           |
-| send    | `-k USER` | `--send-kb=USER`   | send url to `USER` on Keybase                |
+| feature  |   short   |        long        |                 description                  |
+|----------|-----------|--------------------|----------------------------------------------|
+| settings |           | `--init`           | initialize meet settings                     |
+|          | `-u URL`  | `--use URL`        | use URL for this meeting                     |
+| style    | `-s`      | `--snake`          | use snake_case for meeting title             |
+|          | `-d`      | `--dash`           | use dashes for meeting title                 |
+|          | `-t`      | `--title`          | use TitleCase for meeting title (default)    |
+|          | `-S`      | `--shout`          | use SHOUT👏️CASE🗯️ for meeting title        |
+|          | `-3`      | `--heart`          | use ❣️heart❤️style❣️ for meeting title       |
+|          | `-j TEXT` | `--emoji=TEXT`     | put `TEXT` between words of meeting title    |
+| open     | `-o`      | `--open`           | open url in your browser after a short pause |
+|          | `-O`      | `--open-immediate` | open url in your browser immediately         |
+| copy     | `-c`      | `--copy`           | copy url to clipboard using `xsel`           |
+| send     | `-k USER` | `--send-kb=USER`   | send url to `USER` on Keybase                |
 
 ## Installation
 
@@ -60,6 +62,7 @@ To install `meet` from source, you will need these dependencies:
 - make
 - [crystal](https://crystal-lang.org/)
 - coreutils
+- readline
 
 Crystal has these transitive dependencies: `gcc`, `pkg-config`, `libpcre3-dev`,
 `libevent-dev`.
