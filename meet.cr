@@ -20,7 +20,7 @@ require "yaml"
 require "readline"
 
 config_home = ENV.fetch("XDG_CONFIG_HOME", %Q[#{ENV["HOME"]}/.config])
-meet_dir = "#{config_home}/meet/"
+meet_dir = "#{config_home}/meet"
 settings_file = "#{meet_dir}/settings.yml"
 settings = if File.exists?(settings_file)
              YAML.parse(File.read(settings_file)).as_h
@@ -100,6 +100,9 @@ OptionParser.parse do |parser|
     send_to_keybase = true
     keybase_recipient = user
   end
+  parser.on("-u URL", "--use=URL", "url to use") do |url|
+    base_url = url
+  end
   parser.on("-v", "--version", "show version information") do
     version = {{read_file("./shard.yml")
                  .lines
@@ -110,7 +113,7 @@ OptionParser.parse do |parser|
     puts "meet version #{version} (#{git})"
     exit
   end
-  parser.on("", "--init", "initialize meet with a config file") do
+  parser.on("", "--init", "⚙️ initialize meet settings") do
     Dir.mkdir_p(meet_dir)
     new_settings = Hash(String, String).new
     input = Readline.readline("Base url (#{base_url}): ")
@@ -131,6 +134,7 @@ OptionParser.parse do |parser|
     puts parser
     exit
   end
+
 
 
   parser.unknown_args do |args|
