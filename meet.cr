@@ -47,6 +47,9 @@ custom_text = ""
 
 
 def title(style, words, custom_text="")
+  omit_chars = "/#?"
+  words = words.map &.tr(omit_chars, ".")
+
   case style
   when TitleStyle::SnakeCase
     words.join "_"
