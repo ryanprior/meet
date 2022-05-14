@@ -18,6 +18,7 @@ require "option_parser"
 require "colorize"
 require "yaml"
 require "readline"
+require "./base58"
 
 config_home = ENV.fetch("XDG_CONFIG_HOME", %Q[#{ENV["HOME"]}/.config])
 meet_dir = "#{config_home}/meet"
@@ -141,7 +142,7 @@ OptionParser.parse do |parser|
 end
 
 def super_secure_string
-  Random::Secure.base64(6)
+  Base58.random(6)
 end
 
 title_text = title(name_style, meeting_name, custom_text)
