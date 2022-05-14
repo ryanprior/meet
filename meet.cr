@@ -1,6 +1,6 @@
 # meet -- start a meeting quickly.
 # Copyright © 2020 Yana Chen <yana@thefloating.cloud>
-# Copyright © 2020 Ryan Prior <rprior@protonmail.com>
+# Copyright © 2020 - 2022 Ryan Prior <rprior@protonmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -29,8 +29,7 @@ base_url = settings.fetch("base_url", "meet.jit.si").to_s
 
 open_link = false
 open_immediate = false
-send_to_keybase = false
-keybase_recipient = ""
+keybase_recipient : String? = nil
 xclip = false
 meeting_name = ["meeting"]
 enum TitleStyle
@@ -97,7 +96,6 @@ OptionParser.parse do |parser|
     xclip = true
   }
   parser.on("-k USER", "--send-kb=USER", "send URL to USER on Keybase") do |user|
-    send_to_keybase = true
     keybase_recipient = user
   end
   parser.on("-u URL", "--use=URL", "url to use") do |url|
@@ -149,17 +147,20 @@ end
 title_text = title(name_style, meeting_name, custom_text)
 link = "https://#{base_url}/#{super_secure_string}/#{title_text}"
 puts link.colorize :blue
+
 if xclip
   `echo -n "#{link}" | xsel -bi`
   c = "c".colorize.mode :underline
   puts "🚀️ #{c}opied to clipboard!"
 end
-if send_to_keybase
+
+if keybase_recipient
   `keybase chat send --private "#{keybase_recipient}" "#{link}"`
   k = "k".colorize.mode :underline
   whom = keybase_recipient.colorize :light_yellow
   puts "📨️ sent lin#{k} to #{whom} on Keybase!"
 end
+
 if open_link
   o = "o".colorize.mode :underline
   puts "🌍️ #{o}pening in your browser…"
