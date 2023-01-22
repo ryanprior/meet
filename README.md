@@ -27,12 +27,29 @@ https://meet.jit.si/iN9SYLvP/HackOnMeet
 🚀 copied to clipboard!
 ```
 
+### Configuration
+
+Meet works without any configuration files. Optionally, you can initialize to change defaults:
+
+```sh-session
+$ meet --init
+Base url (meet.jit.si): my-jitsi-server.local
+Add random letters to URL for security? (Y/n): n
+📝 wrote config to /home/user/.config/meet/settings.yml
+$ ./meet hack on meet
+https://my-jitsi-server.local/HackOnMeet
+```
+
+Meet respects the `XDG_CONFIG_HOME` environment variable if it's set.
+
 ### Options
 
 | feature  |   short   |        long        |                 description                  |
 |----------|-----------|--------------------|----------------------------------------------|
 | settings |           | `--init`           | initialize meet settings                     |
 |          | `-u URL`  | `--use URL`        | use URL for this meeting                     |
+|          | `-i`      | `--insecure`       | omit secure random portion of URL            |
+|          |           | `--secure`         | always include secure random portion         |
 | style    | `-s`      | `--snake`          | use snake_case for meeting title             |
 |          | `-d`      | `--dash`           | use dashes for meeting title                 |
 |          | `-t`      | `--title`          | use TitleCase for meeting title (default)    |
