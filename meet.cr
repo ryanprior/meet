@@ -25,8 +25,9 @@ meet_dir = "#{config_home}/meet"
 settings_file = "#{meet_dir}/settings.yml"
 settings = if File.exists?(settings_file)
              YAML.parse(File.read(settings_file)).as_h
-           else Hash(String, String).new end
-base_url = settings.fetch("base_url", "meet.jit.si").to_s
+           else Hash(String, YAML::Any).new end
+base_url = settings.fetch("base_url", YAML::Any.new "meet.jit.si").as_s
+secure_name = settings.fetch("secure_name", YAML::Any.new true).as_bool
 
 open_link = false
 open_immediate = false
@@ -105,6 +106,12 @@ OptionParser.parse do |parser|
   parser.on("-u URL", "--use=URL", "url to use") do |url|
     base_url = url
   end
+  parser.on("-i", "--insecure", "omit secure-random portion of meeting URL") {
+    secure_name = false
+  }
+  parser.on("", "--secure", "include secure-random portion of meeting URL") {
+    secure_name = true
+  }
   parser.on("-v", "--version", "show version information") do
     version = {{read_file("./shard.yml")
                  .lines
@@ -117,7 +124,7 @@ OptionParser.parse do |parser|
   end
   parser.on("", "--init", "⚙️ initialize meet settings") do
     Dir.mkdir_p(meet_dir)
-    new_settings = Hash(String, String).new
+    new_settings = Hash(String, String | Bool).new
     input = Readline.readline("Base url (#{base_url}): ")
     new_settings["base_url"] = case input
                                when Nil
@@ -126,10 +133,28 @@ OptionParser.parse do |parser|
                                  input.empty? ? base_url : input.strip
                                else raise "unexpected input"
                                end
+    input = Readline.readline("Add random letters to URL for security? (Y/n): ")
+    new_settings["secure_name"] = case input
+                                  when Nil
+                                    true
+                                  when String
+                                    case input
+                                    when ""
+                                      true
+                                    when /^(([yY](es)?)|([tT](rue)?))$/
+                                      true
+                                    when /^(([nN]o?)|([fF](alse)?))$/
+                                      false
+                                    else
+                                      STDERR.puts "meet: fatal: expected y/n, got: #{input}"
+                                      exit 1
+                                    end
+                                  else raise "unexpected input"
+                                  end
     File.open("#{settings_file}", "w") do |f|
       f.puts(new_settings.to_yaml)
     end
-    puts "📝 wrote config to #{settings_file}"
+    STDERR.puts "📝 wrote config to #{settings_file}"
     exit
   end
   parser.on("-h", "--help", "show this help") do
@@ -145,11 +170,11 @@ OptionParser.parse do |parser|
 end
 
 def super_secure_string
-  Base58.random(6)
+   Base58.random(6)
 end
 
 title_text = title(name_style, meeting_name, custom_text)
-link = "https://#{base_url}/#{super_secure_string}/#{title_text}"
+link = ["https:/", base_url, secure_name ? super_secure_string : nil, title_text].compact.join '/'
 puts link.colorize :blue
 
 if xclip
