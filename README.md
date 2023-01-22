@@ -68,7 +68,7 @@ latest archive. Then unpack it somewhere on your PATH, such as:
 
 ```sh-session
 $ cd ~/Downloads
-$ tar xzf meet-1.1.0.tgz
+$ tar xzf meet-1.2.0.tgz
 $ sudo install meet /usr/local/bin/meet
 ```
 
