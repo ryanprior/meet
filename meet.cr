@@ -32,7 +32,7 @@ secure_name = settings.fetch("secure_name", YAML::Any.new true).as_bool
 open_link = false
 open_immediate = false
 keybase_recipient : String? = nil
-xclip = false
+copy_link = false
 meeting_name = ["meeting"]
 enum TitleStyle
   SnakeCase
@@ -98,7 +98,7 @@ OptionParser.parse do |parser|
     open_immediate = true
   }
   parser.on("-c", "--copy", "copy URL to clipboard using xsel") {
-    xclip = true
+    copy_link = true
   }
   parser.on("-k USER", "--send-kb=USER", "send URL to USER on Keybase") do |user|
     keybase_recipient = user
@@ -177,7 +177,7 @@ title_text = title(name_style, meeting_name, custom_text)
 link = ["https:/", base_url, secure_name ? super_secure_string : nil, title_text].compact.join '/'
 puts link.colorize :blue
 
-if xclip
+if copy_link
   `echo -n "#{link}" | xsel -bi`
   c = "c".colorize.mode :underline
   puts "🚀️ #{c}opied to clipboard!"
